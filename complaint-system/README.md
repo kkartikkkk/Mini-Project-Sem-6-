@@ -13,7 +13,7 @@ A full-stack AI-powered complaint management system that automatically classifie
 | Frontend | React 18 + Vite + Tailwind CSS + Recharts |
 | ML / NLP | FastText (primary) → sklearn TF-IDF + Logistic Regression (fallback) → Rule-based engine |
 | Auth | JWT — python-jose + bcrypt |
-| Email | Brevo SMTP relay via smtplib (no extra packages) |
+| Email | Gmail SMTP via smtplib (no extra packages) |
 | Real-time | WebSockets (live chat between admin and customer) |
 
 ---
@@ -71,18 +71,17 @@ Customers receive emails when:
 - A complaint is **submitted** (confirmation with complaint ID, category, priority)
 - An admin **changes the status** (Open → In Progress → Escalated → Resolved)
 
-Emails are sent via **Brevo** (free tier: 300 emails/day) which has SPF/DKIM configured so they land in the inbox, not spam.
+Emails are sent via **Gmail SMTP**.
 
 Setup:
-1. Create a free account at https://app.brevo.com
-2. Go to **Account → SMTP & API → SMTP tab**
-3. Copy your SMTP login (your Brevo account email) and click **Generate an SMTP key**
-4. Add to `backend/.env`:
+1. Enable 2-Step Verification on your Google account
+2. Go to **Google Account → Security → 2-Step Verification → App Passwords**
+3. Generate an App Password for "Mail"
+4. Set environment variables before starting the backend:
 
-```env
-BREVO_SMTP_USER=youremail@gmail.com
-BREVO_SMTP_KEY=your-brevo-smtp-key
-BREVO_SENDER_NAME=SmartComplaints
+```bash
+set GMAIL_USER=youremail@gmail.com
+set GMAIL_APP_PASSWORD=your-app-password
 ```
 
 If not configured, emails are silently skipped and everything else works normally.
